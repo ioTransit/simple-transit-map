@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { useEffectOnce } from "../hooks/useEffectOnce";
@@ -65,7 +66,35 @@ export const MapComponent = ({
   return (
     <MapBoxContext.Provider value={map}>
       <div id={options.container} className={className}></div>
-      {children}
+      {map && children}
     </MapBoxContext.Provider>
   );
+};
+
+const getJsonFile = async (fileName: string) => {
+  try {
+    const response = await fetch(fileName);
+    return await response.json();
+  } catch (e) {
+    throw new Error("Error fetching JSON data " + fileName);
+  }
+};
+
+export const GtfsLayers = () => {
+  const map = useMapBox();
+  const loadLayers = async () => {
+    const catalogue = (await getJsonFile("catalogue.json")) as {
+      files: string[];
+    };
+    console.log(catalogue);
+    for (const file of catalogue.files) {
+      console.log(file);
+    }
+  };
+
+  useEffect(() => {
+    loadLayers();
+  }, [map]);
+
+  return null;
 };

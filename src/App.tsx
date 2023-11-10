@@ -1,9 +1,8 @@
 import "./App.css";
-import { MapComponent } from "./components/map";
+import { GtfsLayers, MapComponent } from "./components/map";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 function App() {
-  console.log(import.meta.env);
   return (
     <>
       <MapComponent
@@ -12,7 +11,9 @@ function App() {
         options={{
           container: "map-container",
         }}
-      ></MapComponent>
+      >
+        <GtfsLayers> </GtfsLayers>
+      </MapComponent>
     </>
   );
 }

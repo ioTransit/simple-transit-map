@@ -1,8 +1,10 @@
+import * as glob from "glob";
 import fs from "fs";
 import AdmZip from "adm-zip";
 import axios from "axios";
 import gtfs2geojson from "gtfs2geojson";
 import { GTFS_URLS } from "../../config/env";
+import path from "path";
 
 const createGeojsonFromGtfs = async (url) => {
   const body = await axios.get(url, {
@@ -70,6 +72,22 @@ const loopThroughAgencies = async () => {
       JSON.stringify(routesGeojson),
     );
   }
+  generateCatalogue();
 };
 
+export function generateCatalogue() {
+  const jsonFiles = glob.sync(`./public/*.json`);
+  const filteredJsonFiles = jsonFiles.filter(
+    (file) => path.basename(file) !== "catalogue.json",
+  );
+  const fileNamesArray = filteredJsonFiles.map((file) => path.basename(file));
+
+  // Write the array of file names to catalogue.json
+  fs.writeFileSync(
+    path.join("./public", "catalogue.json"),
+    JSON.stringify({ files: fileNamesArray }, null, 2),
+  );
+
+  console.log("Catalogue generated successfully.");
+}
 loopThroughAgencies();
