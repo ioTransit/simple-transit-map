@@ -100,7 +100,6 @@ const addSourceToMap = (id: string, source: FeatureCollection, map: Map) => {
 
 const removeCatalogue = (catalogue: string[], map: Map) => {
   for (const fileName in catalogue) {
-    console.log(fileName);
     map.removeSource(fileName);
     map.removeLayer(fileName);
   }
