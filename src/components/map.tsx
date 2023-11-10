@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { useEffectOnce } from "../hooks/useEffectOnce";
+import { FeatureCollection, MultiLineString } from "geojson";
 
 export const MapBoxContext = createContext<mapboxgl.Map | null>(null);
 
@@ -70,6 +71,11 @@ export const MapComponent = ({
     </MapBoxContext.Provider>
   );
 };
+const getCataloge = async () => {
+  return (await getJsonFile("catalogue.json")) as {
+    files: string[];
+  };
+};
 
 const getJsonFile = async (fileName: string) => {
   try {
@@ -80,20 +86,58 @@ const getJsonFile = async (fileName: string) => {
   }
 };
 
+const loadRoutes = async (fileName: string) => {
+  const fileContents = (await getJsonFile(
+    fileName,
+  )) as FeatureCollection<MultiLineString>;
+  return fileContents;
+};
+
+const addSourceToMap = (id: string, source: FeatureCollection, map: Map) => {
+  if (map.getSource(id)) return;
+  map.addSource(id, { data: source, type: "geojson" });
+};
+
+const removeCatalogue = (catalogue: string[], map: Map) => {
+  for (const fileName in catalogue) {
+    console.log(fileName);
+    map.removeSource(fileName);
+    map.removeLayer(fileName);
+  }
+};
+
+const addRoutesLayer = (file: string, map: Map) => {
+  map.addLayer({
+    id: file,
+    type: "line",
+    source: file,
+    layout: {},
+  });
+};
+
 export const GtfsLayers = () => {
   const map = useMapBox();
   const loadLayers = async () => {
-    const catalogue = (await getJsonFile("catalogue.json")) as {
-      files: string[];
-    };
-    console.log(catalogue);
+    const catalogue = await getCataloge();
     for (const file of catalogue.files) {
-      console.log(file);
+      if (file.includes("route")) {
+        const contents = await loadRoutes(file);
+        addSourceToMap(file, contents, map);
+        addRoutesLayer(file, map);
+      }
     }
   };
 
   useEffect(() => {
-    loadLayers();
+    map.once("load", () => {
+      loadLayers();
+    });
+    return () => {
+      map.off("load", async () => {
+        const catalogue = await getCataloge();
+        removeCatalogue(catalogue.files, map);
+      });
+    };
   }, [map]);
 
   return null;
