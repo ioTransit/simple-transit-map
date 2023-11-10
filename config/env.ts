@@ -4,7 +4,9 @@ dotenv.config();
 
 // Only use on the server
 const envSchema = z.object({
-  VITE_MAPBOX_KEY: z.string().min(1, { message: "MAPBOX_API_KEY required" }),
+  VITE_APP_MAPBOX_KEY: z
+    .string()
+    .min(1, { message: "MAPBOX_API_KEY required" }),
   GTFS_URLS: z
     .string()
     .min(1, { message: "MAPBOX_API_KEY required" })
@@ -13,5 +15,4 @@ const envSchema = z.object({
       return json;
     }),
 });
-console.log(process.env);
-export const { GTFS_URLS, VITE_MAPBOX_KEY } = envSchema.parse(process.env);
+export const { GTFS_URLS, VITE_APP_MAPBOX_KEY } = envSchema.parse(process.env);
