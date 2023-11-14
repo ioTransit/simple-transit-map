@@ -35,8 +35,8 @@ const createGeojsonFromGtfs = async (url) => {
           zip.readAsText(tripsFile.entryName),
         )
       : null;
-  const tripsGeojson = stopsFile
-    ? gtfs2geojson.stops(zip.readAsText(stopsFile.entryName))
+  const tripsGeojson = tripsFile
+    ? gtfs2geojson.lines(zip.readAsText(tripsFile.entryName))
     : null;
 
   return { stopsGeojson, routesGeojson, tripsGeojson };
