@@ -12,6 +12,7 @@ import { FeatureCollection, MultiLineString } from "geojson";
 
 export const MapBoxContext = createContext<mapboxgl.Map | null>(null);
 
+// eslint-disable-next-line
 export const useMapBox = () => {
   const map = useContext(MapBoxContext);
   if (!map) {
@@ -20,6 +21,7 @@ export const useMapBox = () => {
   return map;
 };
 
+// eslint-disable-next-line
 export const useMapBoxStore = ({
   MAPBOX_API_KEY,
   options,
@@ -137,7 +139,7 @@ export const GtfsLayers = () => {
         removeCatalogue(catalogue.files, map);
       });
     };
-  }, [map]);
+  }, [map]); // eslint-disable-line
 
   return null;
 };

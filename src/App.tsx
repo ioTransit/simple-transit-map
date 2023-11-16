@@ -12,7 +12,7 @@ function App() {
           container: "map-container",
         }}
       >
-        <GtfsLayers> </GtfsLayers>
+        <GtfsLayers />
       </MapComponent>
     </>
   );
