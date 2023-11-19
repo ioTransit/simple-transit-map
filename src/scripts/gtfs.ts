@@ -41,7 +41,13 @@ const loopThroughAgencies = async () => {
     );
   }
   generateCatalogue();
+  genterateBounds();
 };
+
+export async function genterateBounds() {
+  const resp = await fetch("catalogue.json");
+  console.log(resp);
+}
 
 export function generateCatalogue() {
   const jsonFiles = glob.sync(`./public/*.json`);
