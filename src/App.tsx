@@ -26,7 +26,6 @@ function App() {
       MultiLineString,
       Route
     >;
-    console.log(routes);
     setRoutes({
       ...routes,
       features: sortBy(routes.features, ["route_short_name"], ["asc"]),
@@ -76,7 +75,6 @@ const RoutesPanel = ({
       if (filter === route_short_name) {
         setFilter(null);
         if (!map) {
-          console.log(!!map);
           return;
         }
         map.flyTo({
