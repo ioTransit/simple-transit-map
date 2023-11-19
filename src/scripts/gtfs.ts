@@ -2,9 +2,9 @@ import * as glob from "glob";
 import fs from "fs";
 import { GTFS_URLS } from "../../config/env";
 import path from "path";
-import { Gtfs } from "gtfs-parser/index";
+import { Gtfs } from "gtfs-parser";
 
-const createEmptyFile = async (filePath) => {
+const createEmptyFile = async (filePath: string) => {
   try {
     fs.writeFile(filePath, "", (error) => {
       if (error) {
@@ -13,7 +13,8 @@ const createEmptyFile = async (filePath) => {
         console.log(`Empty file created at ${filePath}`);
       }
     });
-  } catch (error) {
+    // eslint-disable-next-line
+  } catch (error: any) {
     console.error(`Error creating empty file: ${error.message}`);
   }
 };
