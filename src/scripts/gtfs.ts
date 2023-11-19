@@ -3,6 +3,14 @@ import fs from "fs";
 import { GTFS_URLS } from "../../config/env";
 import path from "path";
 import { Gtfs } from "gtfs-parser";
+import { FeatureCollection, MultiLineString, Position } from "geojson";
+import { Route } from "gtfs-types";
+//@ts-expect-error issue with import
+import * as turf from "@turf/turf";
+//@ts-expect-error issue with import
+import buffer from "@turf/buffer"; // es-lint-disable-line
+//@ts-expect-error issue with import
+import bbox from "@turf/bbox"; // es-lint-disable-line
 
 const createEmptyFile = async (filePath: string) => {
   try {
@@ -45,8 +53,31 @@ const loopThroughAgencies = async () => {
 };
 
 export async function genterateBounds() {
-  const resp = await fetch("catalogue.json");
-  console.log(resp);
+  const jsonFiles = glob.sync(`./public/*routes.json`);
+  let coordinates: Position[] = [];
+  for (const fileName of jsonFiles) {
+    const file = fs.readFileSync(fileName, {
+      encoding: "utf8",
+      flag: "r",
+    });
+    const routes = JSON.parse(file) as FeatureCollection<
+      MultiLineString,
+      Route
+    >;
+    for (const feature of routes.features) {
+      for (const array of feature.geometry.coordinates) {
+        coordinates = coordinates.concat(array);
+      }
+    }
+    const bounds = bbox(
+      buffer(turf.lineString(coordinates), 5, {
+        units: "miles",
+      }),
+    );
+    console.log(bounds);
+    await createEmptyFile("./public/bounds.json");
+    fs.writeFileSync("./public/bounds.json", JSON.stringify(bounds));
+  }
 }
 
 export function generateCatalogue() {

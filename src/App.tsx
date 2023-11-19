@@ -4,7 +4,7 @@ import Map, { useControl, useMap } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useState } from "react";
 import { Routes } from "./SystemLayers";
-import mapboxgl from "mapbox-gl";
+import mapboxgl, { LngLatBoundsLike } from "mapbox-gl";
 import { FeatureCollection, MultiLineString, Position } from "geojson";
 import { sortBy } from "lodash";
 import clsx from "clsx";
@@ -15,10 +15,17 @@ import bbox from "@turf/bbox"; // es-lint-disable-line
 
 function App() {
   const [filter, setFilter] = useState<string | null>(null);
+  const [bounds, setBounds] = useState<LngLatBoundsLike | null>(null);
   const [routes, setRoutes] = useState<FeatureCollection<
     MultiLineString,
     Route
   > | null>(null);
+
+  const setupBounds = async () => {
+    const resp = await fetch("bounds.json");
+    const _bounds = (await resp.json()) as LngLatBoundsLike;
+    setBounds(_bounds);
+  };
 
   const setupLayers = async () => {
     const resp = await fetch("0-routes.json");
@@ -34,28 +41,30 @@ function App() {
 
   useEffect(() => {
     setupLayers();
+    setupBounds();
   }, []);
 
   return (
     <>
-      <Map
-        mapboxAccessToken={import.meta.env.VITE_APP_MAPBOX_KEY}
-        initialViewState={{
-          longitude: -103.013209,
-          latitude: 42.165439,
-          zoom: 7,
-        }}
-        style={{ width: "100vw", height: "100vh" }}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
-      >
-        <Routes filter={filter}></Routes>
-        <Tools></Tools>
-        <RoutesPanel
-          filter={filter}
-          routes={routes}
-          setFilter={setFilter}
-        ></RoutesPanel>
-      </Map>
+      {bounds && (
+        <Map
+          mapboxAccessToken={import.meta.env.VITE_APP_MAPBOX_KEY}
+          initialViewState={{
+            bounds,
+            padding: { top: 150, bottom: 150, left: 150, right: 150 },
+          }}
+          style={{ width: "100vw", height: "100vh" }}
+          mapStyle="mapbox://styles/mapbox/streets-v9"
+        >
+          <Routes filter={filter}></Routes>
+          <Tools></Tools>
+          <RoutesPanel
+            filter={filter}
+            routes={routes}
+            setFilter={setFilter}
+          ></RoutesPanel>
+        </Map>
+      )}
     </>
   );
 }

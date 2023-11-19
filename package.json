@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@turf/bbox": "^6.5.0",
+    "@turf/buffer": "^6.5.0",
     "@turf/turf": "^6.5.0",
     "@types/geojson": "^7946.0.13",
     "adm-zip": "^0.5.10",
