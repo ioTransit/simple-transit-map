@@ -25,16 +25,41 @@ const pointStyle = (id: string, color: string, minzoom: number = 12) => {
 };
 
 const flexAreaStyle = (color: string) => {
-  const style: FillLayer = {
+  const fillStyle: FillLayer = {
     id: "flex-area",
     source: "flex-area",
     type: "fill",
     paint: {
       "fill-color": ["case", ["has", "fill"], ["get", "fill"], color],
-      "fill-opacity": 0.5,
+      "fill-opacity": [
+        "case",
+        ["has", "fill-opacity"],
+        ["get", "fill-opacity"],
+        0.5,
+      ],
     },
   };
-  return style;
+  const outlineStyle: LineLayer = {
+    id: "flex-area-outline",
+    source: "flex-area",
+    type: "line",
+    paint: {
+      "line-color": ["case", ["has", "stroke"], ["get", "stroke"], "black"],
+      "line-opacity": [
+        "case",
+        ["has", "stroke-opacity"],
+        ["get", "stroke-opacity"],
+        1,
+      ],
+      "line-width": [
+        "case",
+        ["has", "stroke-width"],
+        ["get", "stroke-width"],
+        3,
+      ],
+    },
+  };
+  return { fillStyle, outlineStyle };
 };
 const polygonStyle = (id: string, color: string) => {
   const style: FillLayer = {
@@ -144,7 +169,8 @@ export const FlexAreas = () => {
 
   return (
     <Source id="flex-areas" type="geojson" data="flex-areas.geojson">
-      <Layer {...style} beforeId="road-label-small"></Layer>
+      <Layer {...style.fillStyle} beforeId="road-label-small"></Layer>
+      <Layer {...style.outlineStyle} beforeId="road-label-small"></Layer>
     </Source>
   );
 };

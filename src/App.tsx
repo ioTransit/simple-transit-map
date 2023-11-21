@@ -55,9 +55,9 @@ function App() {
           style={{ width: "100vw", height: "100vh" }}
           mapStyle="mapbox://styles/mapbox/streets-v9"
         >
+          <FlexAreas></FlexAreas>
           <Routes filter={filter}></Routes>
           <Stops filter={filter}></Stops>
-          <FlexAreas></FlexAreas>
           <Tools></Tools>
           <RoutesPanel
             filter={filter}

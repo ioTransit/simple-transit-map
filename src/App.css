@@ -48,6 +48,11 @@
   white-space: nowrap;
 }
 
+.layer-button:hover {
+  font-style: italic;
+  background-color: lightgray;
+}
+
 .route-color-symbol {
   height: 15px;
   width: 15px;
