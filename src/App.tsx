@@ -112,37 +112,47 @@ const RoutesPanel = ({
 
   return (
     <div id="layer-panel">
-      {routes &&
-        routes.features
-          .sort((a, b) => {
-            if (
-              !a.properties.route_short_name ||
-              !a.properties.route_short_name
-            )
-              return 0;
-            else if (
-              //@ts-expect-error unreach
-              a.properties.route_short_name > b.properties.route_short_name
-            )
-              return 1;
-            else return 0;
-          })
-          .map((route) => {
-            return (
-              <button
-                key={route.id}
-                onClick={() =>
-                  clickButton(route.properties.route_short_name || null)
-                }
-                className={clsx(
-                  "layer-button",
-                  filter === route.properties.route_short_name && "active",
-                )}
-              >
-                {route.properties.route_short_name}
-              </button>
-            );
-          })}
+      <h2 className="layer-group-title">Routes</h2>
+      <div className="layer-group">
+        {routes &&
+          routes.features
+            .sort((a, b) => {
+              if (
+                !a.properties.route_short_name ||
+                !a.properties.route_short_name
+              )
+                return 0;
+              else if (
+                //@ts-expect-error unreach
+                a.properties.route_short_name > b.properties.route_short_name
+              )
+                return 1;
+              else return 0;
+            })
+            .map((route) => {
+              return (
+                <button
+                  key={route.id}
+                  onClick={() =>
+                    clickButton(route.properties.route_short_name || null)
+                  }
+                  className={clsx(
+                    "layer-button",
+                    filter === route.properties.route_short_name && "active",
+                  )}
+                >
+                  <div
+                    className="route-color-symbol"
+                    style={{
+                      backgroundColor: `#${route.properties.route_color}`,
+                    }}
+                  ></div>
+
+                  <span>{route.properties.route_short_name}</span>
+                </button>
+              );
+            })}
+      </div>
     </div>
   );
 };

@@ -16,11 +16,42 @@
   padding: 20px;
   border-radius: 20px;
   left: 20px;
-  height: 200px;
+  max-height: 300px;
 }
 
+.layer-group-title {
+  color: black;
+  font-weight: 900;
+  font-size: 16px;
+  padding: 0;
+  margin: 0;
+}
+.layer-group {
+  width: 100%;
+  max-height: 300px;
+  overflow: hidden auto;
+  display: grid;
+  gap: 8px;
+  margin: 5px 0;
+}
 .layer-button {
   background-color: gray;
+  gap: 10px;
+  display: flex;
+  height: 40px;
+  align-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.route-color-symbol {
+  height: 15px;
+  width: 15px;
+  z-index: 100;
 }
 
 .active {
