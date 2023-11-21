@@ -51,7 +51,6 @@ function App() {
           mapboxAccessToken={import.meta.env.VITE_APP_MAPBOX_KEY}
           initialViewState={{
             bounds,
-            padding: { top: 150, bottom: 150, left: 150, right: 150 },
           }}
           style={{ width: "100vw", height: "100vh" }}
           mapStyle="mapbox://styles/mapbox/streets-v9"
@@ -63,6 +62,7 @@ function App() {
             filter={filter}
             routes={routes}
             setFilter={setFilter}
+            bounds={bounds}
           ></RoutesPanel>
         </Map>
       )}
@@ -74,10 +74,12 @@ const RoutesPanel = ({
   routes,
   filter,
   setFilter,
+  bounds,
 }: {
   routes: FeatureCollection<MultiLineString, Route> | null;
   filter: string | null;
   setFilter: (e: string | null) => void;
+  bounds: LngLatBoundsLike;
 }) => {
   const { current: map } = useMap();
   const clickButton = useCallback(
@@ -87,10 +89,7 @@ const RoutesPanel = ({
         if (!map) {
           return;
         }
-        map.flyTo({
-          center: [-103.013209, 42.165439],
-          zoom: 7,
-        });
+        map.fitBounds(bounds);
       } else {
         setFilter(route_short_name);
         const _routes = routes?.features.filter(
@@ -108,7 +107,7 @@ const RoutesPanel = ({
         });
       }
     },
-    [routes, map, filter, setFilter],
+    [routes, map, filter, bounds, setFilter],
   );
 
   return (

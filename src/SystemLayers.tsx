@@ -10,12 +10,12 @@ import {
 import { getJsonFile } from "./lib";
 import { FeatureCollection, Point } from "geojson";
 
-const pointStyle = (id: string, color: string) => {
+const pointStyle = (id: string, color: string, minzoom: number = 12) => {
   const style: CircleLayer = {
     id: id,
     source: id,
     type: "circle",
-    minzoom: 10,
+    minzoom,
     paint: {
       "circle-radius": 10,
       "circle-color": color,
