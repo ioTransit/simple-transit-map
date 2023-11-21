@@ -21,10 +21,11 @@ import { z } from "zod";
 
 const zFlexArea = z.object({
   name: z.string().min(1),
-  "fill-color": z.string().optional(),
+  fill: z.string().optional(),
 });
 
 function App() {
+  const [flexArea, setFlexArea] = useState<string | null>(null);
   const [filter, setFilter] = useState<string | null>(null);
   const [bounds, setBounds] = useState<LngLatBoundsLike | null>(null);
   const [flexAreas, setFlexAreas] = useState<FeatureCollection<
@@ -93,6 +94,8 @@ function App() {
             filter={filter}
             routes={routes}
             flexAreas={flexAreas}
+            setFlexArea={setFlexArea}
+            flexArea={flexArea}
             setFilter={setFilter}
             bounds={bounds}
           ></LayersPanel>
@@ -104,18 +107,51 @@ function App() {
 
 const LayersPanel = ({
   routes,
+  flexArea,
   flexAreas,
   filter,
+  setFlexArea,
   setFilter,
   bounds,
 }: {
   routes: FeatureCollection<MultiLineString, Route> | null;
   flexAreas: FeatureCollection<MultiPolygon, z.infer<typeof zFlexArea>> | null;
+  setFlexArea: (flexAreaName: string | null) => void;
+  flexArea: string | null;
   filter: string | null;
   setFilter: (e: string | null) => void;
   bounds: LngLatBoundsLike;
 }) => {
   const { current: map } = useMap();
+  const clickFlexArea = useCallback(
+    (flexAreaName: string | null) => {
+      if (flexArea === flexAreaName) {
+        setFlexArea(null);
+        if (!map) {
+          return;
+        }
+        map.fitBounds(bounds);
+      } else {
+        setFlexArea(flexAreaName);
+        const _routes = flexAreas?.features.filter(
+          (feature) => feature.properties.name === flexAreaName,
+        );
+        if (!_routes) return;
+        let coordinates: Position[] = [];
+        for (const feature of _routes) {
+          for (const array of feature.geometry.coordinates) {
+            for (const arr of array) {
+              coordinates = coordinates.concat(arr);
+            }
+          }
+        }
+        map?.fitBounds(bbox(turf.lineString(coordinates)), {
+          padding: 150,
+        });
+      }
+    },
+    [map, bounds, setFlexArea, flexAreas?.features, flexArea],
+  );
   const clickButton = useCallback(
     (route_short_name: string | null) => {
       if (filter === route_short_name) {
@@ -146,84 +182,84 @@ const LayersPanel = ({
 
   return (
     <div id="layer-panel">
-      <h2 className="layer-group-title">Routes</h2>
       <div className="layer-group">
-        {routes &&
-          routes.features
-            .sort((a, b) => {
-              if (
-                !a.properties.route_short_name ||
-                !a.properties.route_short_name
-              )
-                return 0;
-              else if (
-                //@ts-expect-error unreach
-                a.properties.route_short_name > b.properties.route_short_name
-              )
-                return 1;
-              else return 0;
-            })
-            .map((route) => {
-              return (
-                <button
-                  key={route.id}
-                  onClick={() =>
-                    clickButton(route.properties.route_short_name || null)
-                  }
-                  className={clsx(
-                    "layer-button",
-                    filter === route.properties.route_short_name && "active",
-                  )}
-                >
-                  <div
-                    className="route-color-symbol"
-                    style={{
-                      backgroundColor: `#${route.properties.route_color}`,
-                    }}
-                  ></div>
+        <h2 className="layer-group-title">Routes</h2>
+        <div className="layer-list">
+          {routes &&
+            routes.features
+              .sort((a, b) => {
+                if (
+                  !a.properties.route_short_name ||
+                  !a.properties.route_short_name
+                )
+                  return 0;
+                else if (
+                  //@ts-expect-error unreach
+                  a.properties.route_short_name > b.properties.route_short_name
+                )
+                  return 1;
+                else return 0;
+              })
+              .map((route) => {
+                return (
+                  <button
+                    key={route.id}
+                    onClick={() =>
+                      clickButton(route.properties.route_short_name || null)
+                    }
+                    className={clsx(
+                      "layer-button",
+                      filter === route.properties.route_short_name && "active",
+                    )}
+                  >
+                    <div
+                      className="route-color-symbol"
+                      style={{
+                        backgroundColor: `#${route.properties.route_color}`,
+                      }}
+                    ></div>
 
-                  <span>{route.properties.route_short_name}</span>
-                </button>
-              );
-            })}
+                    <span>{route.properties.route_short_name}</span>
+                  </button>
+                );
+              })}
+        </div>
       </div>
       {flexAreas && (
-        <>
-          {" "}
-          <h2 className="layer-group-panel">Flex Areas</h2>
-          {flexAreas && (
-            <div className="layer-group">
-              {flexAreas.features
-                .sort((a, b) => {
-                  if (!a.properties.name || !a.properties.name) return 0;
-                  else if (a.properties.name > b.properties.name) return 1;
-                  else return 0;
-                })
-                .map((area) => {
-                  return (
-                    <button
-                      key={area.properties.name}
-                      onClick={() => clickButton(area.properties.name || null)}
-                      className={clsx(
-                        "layer-button",
-                        filter === area.properties.name && "active",
-                      )}
-                    >
-                      {
-                        <div
-                          className="route-color-symbol"
-                          style={{
-                            backgroundColor: `#${area.properties["fill-color"]}`,
-                          }}
-                        ></div>
-                      }
-                      <span>{area.properties.name}</span>
-                    </button>
-                  );
-                })}
-            </div>
-          )}
-        </>
+        <div className="layer-group">
+          <h2 className="layer-group-title">Flex Areas</h2>
+          <div className="layer-list">
+            {flexAreas.features
+              .sort((a, b) => {
+                if (!a.properties.name || !a.properties.name) return 0;
+                else if (a.properties.name > b.properties.name) return 1;
+                else return 0;
+              })
+              .map((area) => {
+                return (
+                  <button
+                    key={area.properties.name}
+                    onClick={() => clickFlexArea(area.properties.name || null)}
+                    className={clsx(
+                      "layer-button",
+                      filter === area.properties.name && "active",
+                    )}
+                  >
+                    {
+                      <div
+                        className="route-color-symbol"
+                        style={{
+                          backgroundColor: `${area.properties["fill"]}`,
+                        }}
+                      ></div>
+                    }
+                    <span>{area.properties.name}</span>
+                  </button>
+                );
+              })}
+            )
+          </div>
+        </div>
       )}
     </div>
   );

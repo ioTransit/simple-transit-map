@@ -201,7 +201,7 @@ export const Stops = ({ filter }: { filter: string | null }) => {
 
   return (
     <Source id="routes" type="geojson" data="0-stops.json">
-      <Layer {...style} beforeId="road-label-small" filter={_filter}></Layer>
+      <Layer {...style} filter={_filter}></Layer>
     </Source>
   );
 };
