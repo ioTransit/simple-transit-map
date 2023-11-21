@@ -35,7 +35,6 @@ export const useMapBoxStore = ({
     const _map = new mapboxgl.Map({
       fitBoundsOptions: {
         maxZoom: 18,
-        padding: { top: 25, bottom: 25, left: 25, right: 25 },
       },
       container: options.container,
       style: "mapbox://styles/mapbox/streets-v12",

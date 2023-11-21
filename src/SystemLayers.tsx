@@ -1,8 +1,66 @@
 import { useEffect, useMemo, useState } from "react";
-import { Layer, FillLayer, LineLayer, Source, Marker } from "react-map-gl";
+import {
+  Layer,
+  FillLayer,
+  LineLayer,
+  Source,
+  Marker,
+  CircleLayer,
+} from "react-map-gl";
 import { getJsonFile } from "./lib";
 import { FeatureCollection, Point } from "geojson";
 
+const pointStyle = (id: string, color: string, minzoom: number = 12) => {
+  const style: CircleLayer = {
+    id: id,
+    source: id,
+    type: "circle",
+    minzoom,
+    paint: {
+      "circle-radius": 10,
+      "circle-color": color,
+    },
+  };
+  return style;
+};
+
+const flexAreaStyle = (color: string) => {
+  const fillStyle: FillLayer = {
+    id: "flex-area",
+    source: "flex-area",
+    type: "fill",
+    paint: {
+      "fill-color": ["case", ["has", "fill"], ["get", "fill"], color],
+      "fill-opacity": [
+        "case",
+        ["has", "fill-opacity"],
+        ["get", "fill-opacity"],
+        0.5,
+      ],
+    },
+  };
+  const outlineStyle: LineLayer = {
+    id: "flex-area-outline",
+    source: "flex-area",
+    type: "line",
+    paint: {
+      "line-color": ["case", ["has", "stroke"], ["get", "stroke"], "black"],
+      "line-opacity": [
+        "case",
+        ["has", "stroke-opacity"],
+        ["get", "stroke-opacity"],
+        1,
+      ],
+      "line-width": [
+        "case",
+        ["has", "stroke-width"],
+        ["get", "stroke-width"],
+        3,
+      ],
+    },
+  };
+  return { fillStyle, outlineStyle };
+};
 const polygonStyle = (id: string, color: string) => {
   const style: FillLayer = {
     id: id,
@@ -106,6 +164,17 @@ export const PointSourceLayer = ({
   );
 };
 
+export const FlexAreas = () => {
+  const style = flexAreaStyle("#795548");
+
+  return (
+    <Source id="flex-areas" type="geojson" data="flex-areas.geojson">
+      <Layer {...style.fillStyle} beforeId="road-label-small"></Layer>
+      <Layer {...style.outlineStyle} beforeId="road-label-small"></Layer>
+    </Source>
+  );
+};
+
 export const Routes = ({ filter }: { filter: string | null }) => {
   const _filter = useMemo(
     () =>
@@ -118,6 +187,21 @@ export const Routes = ({ filter }: { filter: string | null }) => {
   return (
     <Source id="routes" type="geojson" data="0-routes.json">
       <Layer {...style} beforeId="road-label-small" filter={_filter}></Layer>
+    </Source>
+  );
+};
+export const Stops = ({ filter }: { filter: string | null }) => {
+  const _filter = useMemo(
+    () =>
+      filter ? ["==", "route_short_name", filter] : ["has", "route_short_name"],
+    [filter],
+  );
+
+  const style = pointStyle("stops", "#795548");
+
+  return (
+    <Source id="routes" type="geojson" data="0-stops.json">
+      <Layer {...style} filter={_filter}></Layer>
     </Source>
   );
 };
