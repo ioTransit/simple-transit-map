@@ -3,7 +3,7 @@ import type { Route } from "gtfs-types";
 import Map, { useControl, useMap } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useState } from "react";
-import { Routes } from "./SystemLayers";
+import { Routes, Stops } from "./SystemLayers";
 import mapboxgl, { LngLatBoundsLike } from "mapbox-gl";
 import { FeatureCollection, MultiLineString, Position } from "geojson";
 import { sortBy } from "lodash";
@@ -57,6 +57,7 @@ function App() {
           mapStyle="mapbox://styles/mapbox/streets-v9"
         >
           <Routes filter={filter}></Routes>
+          <Stops filter={filter}></Stops>
           <Tools></Tools>
           <RoutesPanel
             filter={filter}

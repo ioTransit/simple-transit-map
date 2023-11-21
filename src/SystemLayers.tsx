@@ -1,7 +1,28 @@
 import { useEffect, useMemo, useState } from "react";
-import { Layer, FillLayer, LineLayer, Source, Marker } from "react-map-gl";
+import {
+  Layer,
+  FillLayer,
+  LineLayer,
+  Source,
+  Marker,
+  CircleLayer,
+} from "react-map-gl";
 import { getJsonFile } from "./lib";
 import { FeatureCollection, Point } from "geojson";
+
+const pointStyle = (id: string, color: string) => {
+  const style: CircleLayer = {
+    id: id,
+    source: id,
+    type: "circle",
+    minzoom: 10,
+    paint: {
+      "circle-radius": 10,
+      "circle-color": color,
+    },
+  };
+  return style;
+};
 
 const polygonStyle = (id: string, color: string) => {
   const style: FillLayer = {
@@ -106,6 +127,21 @@ export const PointSourceLayer = ({
   );
 };
 
+export const Stops = ({ filter }: { filter: string | null }) => {
+  const _filter = useMemo(
+    () =>
+      filter ? ["==", "route_short_name", filter] : ["has", "route_short_name"],
+    [filter],
+  );
+
+  const style = pointStyle("stops", "#795548");
+
+  return (
+    <Source id="routes" type="geojson" data="0-stops.json">
+      <Layer {...style} beforeId="road-label-small" filter={_filter}></Layer>
+    </Source>
+  );
+};
 export const Routes = ({ filter }: { filter: string | null }) => {
   const _filter = useMemo(
     () =>
