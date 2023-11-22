@@ -1,0 +1,2 @@
+﻿agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url,agency_email
+PHT,Panhandle Transit Services,https://www.ridepts.com/,America/Denver,en,308-761-8747,https://www.ridepts.com/fares,
