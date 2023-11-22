@@ -190,18 +190,12 @@ export const Routes = ({ filter }: { filter: string | null }) => {
     </Source>
   );
 };
-export const Stops = ({ filter }: { filter: string | null }) => {
-  const _filter = useMemo(
-    () =>
-      filter ? ["==", "route_short_name", filter] : ["has", "route_short_name"],
-    [filter],
-  );
-
+export const Stops = () => {
   const style = pointStyle("stops", "#795548");
 
   return (
-    <Source id="routes" type="geojson" data="0-stops.json">
-      <Layer {...style} filter={_filter}></Layer>
+    <Source id="stops" type="geojson" data="0-stops.json">
+      <Layer {...style}></Layer>
     </Source>
   );
 };

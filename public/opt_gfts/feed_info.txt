@@ -1,0 +1,2 @@
+﻿feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version,feed_contact_email,feed_contact_url
+Panhandle Transit Services,https://www.ridepts.com/,en,20220501,20231031,20220613,info@panhandletrails.com,https://www.ridepts.com/

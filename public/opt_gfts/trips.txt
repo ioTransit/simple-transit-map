@@ -1,0 +1,27 @@
+﻿route_id,service_id,trip_id,trip_headsign,direction_id,block_id,shape_id,wheelchair_accessible,bikes_allowed
+green,m-s,Green_2_Ogallala_T01,Ogallala,0,,green_2ogallala,1,1
+green,m-s,Green_2_Crawford_T01,Crawford,1,,green_2crawford,1,1
+green,m-s,Green_spur_Scotts2Bridge_T01,Bridgeport,0,,green_2bridgeport,1,1
+green,m-s,Green_spur_Bridge2Scotts_T01,Scottsbluff,1,,green_2scottsbluff,1,1
+blue,m-s,Blue_2Scottsbluff_T01,Gering NE Scotts Bluff County Courthouse,0,,blue_2scottsbluff,1,1
+blue,m-s,Blue_2Scottsbluff_T02,Gering NE Scotts Bluff County Courthouse,0,,blue_2scottsbluff,1,1
+blue,m-s,Blue_2Scottsbluff_T03,Gering NE Scotts Bluff County Courthouse,0,,blue_2scottsbluff,1,1
+blue,m-s,Blue_2Scottsbluff_T04,Gering NE Scotts Bluff County Courthouse,0,,blue_2scottsbluff,1,1
+blue,m-s,Blue_2Alliance_T01,,1,,blue_2alliance,1,1
+blue,m-s,Blue_2Alliance_T02,,1,,blue_2alliance,1,1
+blue,m-s,Blue_2Alliance_T03,Alliance NE Panhandle Trails Depot,1,,blue_2alliance,1,1
+blue,m-s,Blue_2Alliance_T04,Alliance NE Panhandle Trails Depot,1,,blue_2alliance,1,1
+orange,m-f,Orange_wed_2PineRidge_T01,Pine Ridge SD Pine Ridge Hopsital,0,,orange_2pineridge,1,1
+orange,m-f,Orange_wed_2Scottsbluff_T01,Scottsbluff NE Lakota Lutheran Center,1,,orange_2scottsbluff,1,1
+bronze,m-f,Bronze Hyannis to Alliance_T01,Alliance NE Panhandle Trails Depot,0,,bronze_2alliance,1,1
+bronze,m-f,Bronze Hyannis to Alliance_T02,Alliance NE Panhandle Trails Depot,0,,bronze_2alliance,1,1
+bronze,m-f,Bronze Hyannis to Alliance_T03,Alliance NE Panhandle Trails Depot,0,,bronze_2alliance,1,1
+bronze,m-f,Bronze to Hyannis_T01,Hyannis NE Sinclair,1,,bronze_2hyannis,1,1
+bronze,m-f,Bronze to Hyannis_T02,Hyannis NE Sinclair,1,,bronze_2hyannis,1,1
+bronze,m-f,Bronze to Hyannis_T03,Hyannis NE Sinclair,1,,bronze_2hyannis,1,1
+bronze,m-f,Bronze Gordon to Chadron_T01,Chadron,0,,bronze_2chadron,1,1
+bronze,m-f,Bronze Gordon to Chadron_T02,Chadron,0,,bronze_2chadron,1,1
+bronze,m-f,Bronze Gordon to Chadron_T03,Chadron,0,,bronze_2chadron,1,1
+bronze,m-f,Bronze to Gordon_T01,Gordon,1,,bronze_2gordon,1,1
+bronze,m-f,Bronze to Gordon_T02,Gordon,1,,bronze_2gordon,1,1
+bronze,m-f,Bronze to Gordon_T03,Gordon,1,,bronze_2gordon,1,1

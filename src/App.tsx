@@ -88,7 +88,7 @@ function App() {
         >
           <FlexAreas></FlexAreas>
           <Routes filter={filter}></Routes>
-          <Stops filter={filter}></Stops>
+          <Stops></Stops>
           <Tools></Tools>
           <LayersPanel
             filter={filter}
