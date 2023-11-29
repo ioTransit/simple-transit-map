@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Layer,
   FillLayer,
@@ -6,9 +6,12 @@ import {
   Source,
   Marker,
   CircleLayer,
+  Popup,
 } from "react-map-gl";
 import { getJsonFile } from "./lib";
-import { FeatureCollection, Point } from "geojson";
+import { Feature, FeatureCollection, Point } from "geojson";
+import { useMap } from "react-map-gl/dist/esm/components/use-map";
+import { Stop } from "gtfs-types";
 
 const pointStyle = (id: string, color: string, minzoom: number = 12) => {
   const style: CircleLayer = {
@@ -192,10 +195,40 @@ export const Routes = ({ filter }: { filter: string | null }) => {
 };
 export const Stops = () => {
   const style = pointStyle("stops", "#795548");
+  const { current: map } = useMap();
+  const [popupInfo, setPopupInfo] = useState<null | Feature<Point, Stop>>(null);
 
+  const onClick = useCallback((e: FeatureCollection<Point, Stop>) => {
+    if (e.features[0]) setPopupInfo(e.features[0]);
+  }, []);
+  useEffect(() => {
+    if (!map) return;
+    else {
+      map.on("load", () => {
+        // @ts-expect-error on click should have 3 arguements
+        map?.on("click", "stops", onClick);
+      });
+    }
+    return () => {
+      // @ts-expect-error on click should have 3 arguements
+      map?.off("click", "stops", onClick);
+    };
+  }, [map, onClick]);
   return (
-    <Source id="stops" type="geojson" data="0-stops.json">
-      <Layer {...style}></Layer>
-    </Source>
+    <>
+      {popupInfo && (
+        <Popup
+          anchor="top"
+          longitude={popupInfo.geometry.coordinates[0]}
+          latitude={popupInfo.geometry.coordinates[1]}
+          onClose={() => setPopupInfo(null)}
+        >
+          {JSON.stringify(popupInfo)}
+        </Popup>
+      )}
+      <Source id="stops" type="geojson" data="0-stops.json">
+        <Layer {...style}></Layer>
+      </Source>
+    </>
   );
 };
