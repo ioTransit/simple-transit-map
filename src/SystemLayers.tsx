@@ -223,7 +223,10 @@ export const Stops = () => {
           latitude={popupInfo.geometry.coordinates[1]}
           onClose={() => setPopupInfo(null)}
         >
-          {JSON.stringify(popupInfo)}
+          <h3 className="popup-title">
+            Stop Name: {popupInfo.properties.stop_name}
+          </h3>
+          <p>Routes</p>
         </Popup>
       )}
       <Source id="stops" type="geojson" data="0-stops.json">
