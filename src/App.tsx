@@ -5,12 +5,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useState } from "react";
 import { FlexAreas, Routes, Stops } from "./SystemLayers";
 import mapboxgl, { LngLatBoundsLike } from "mapbox-gl";
-import {
-  FeatureCollection,
-  MultiLineString,
-  MultiPolygon,
-  Position,
-} from "geojson";
+import { FeatureCollection, MultiLineString, Polygon, Position } from "geojson";
 import { sortBy } from "lodash";
 import clsx from "clsx";
 //@ts-expect-error issue with import
@@ -29,7 +24,7 @@ function App() {
   const [filter, setFilter] = useState<string | null>(null);
   const [bounds, setBounds] = useState<LngLatBoundsLike | null>(null);
   const [flexAreas, setFlexAreas] = useState<FeatureCollection<
-    MultiPolygon,
+    Polygon,
     z.infer<typeof zFlexArea>
   > | null>(null);
   const [routes, setRoutes] = useState<FeatureCollection<
@@ -47,7 +42,7 @@ function App() {
     try {
       const resp = await fetch("flex-areas.geojson");
       const areas = (await resp.json()) as FeatureCollection<
-        MultiPolygon,
+        Polygon,
         z.infer<typeof zFlexArea>
       >;
       setFlexAreas(areas);
@@ -115,7 +110,7 @@ const LayersPanel = ({
   bounds,
 }: {
   routes: FeatureCollection<MultiLineString, Route> | null;
-  flexAreas: FeatureCollection<MultiPolygon, z.infer<typeof zFlexArea>> | null;
+  flexAreas: FeatureCollection<Polygon, z.infer<typeof zFlexArea>> | null;
   setFlexArea: (flexAreaName: string | null) => void;
   flexArea: string | null;
   filter: string | null;
@@ -133,21 +128,20 @@ const LayersPanel = ({
         map.fitBounds(bounds);
       } else {
         setFlexArea(flexAreaName);
-        const _routes = flexAreas?.features.filter(
+        const area = flexAreas?.features.find(
           (feature) => feature.properties.name === flexAreaName,
         );
-        if (!_routes) return;
-        let coordinates: Position[] = [];
-        for (const feature of _routes) {
-          for (const array of feature.geometry.coordinates) {
-            for (const arr of array) {
-              coordinates = coordinates.concat(arr);
-            }
-          }
+        if (!area) return;
+        console.log({ area });
+        if (area.geometry.type === "Polygon") {
+          map?.fitBounds(bbox(turf.polygon(area.geometry.coordinates)), {
+            padding: 150,
+          });
+        } else if (area.geometry.type === "MultiPolygon") {
+          map?.fitBounds(bbox(turf.multiPolygon(area.geometry.coordinates)), {
+            padding: 150,
+          });
         }
-        map?.fitBounds(bbox(turf.lineString(coordinates)), {
-          padding: 150,
-        });
       }
     },
     [map, bounds, setFlexArea, flexAreas?.features, flexArea],
@@ -245,15 +239,17 @@ const LayersPanel = ({
                       filter === area.properties.name && "active",
                     )}
                   >
-                    {
-                      <div
-                        className="route-color-symbol"
-                        style={{
-                          backgroundColor: `${area.properties["fill"]}`,
-                        }}
-                      ></div>
-                    }
-                    <span>{area.properties.name}</span>
+                    {/* { */}
+                    {/*   <div */}
+                    {/*     className="flex-color-symbol" */}
+                    {/*     style={{ */}
+                    {/*       backgroundColor: `${area.properties["fill"]}`, */}
+                    {/*     }} */}
+                    {/*   ></div> */}
+                    {/* } */}
+                    <span className="flex-area-name">
+                      {area.properties.name}
+                    </span>
                   </button>
                 );
               })}

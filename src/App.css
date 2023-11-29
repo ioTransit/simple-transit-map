@@ -58,12 +58,19 @@
   background-color: lightgray;
 }
 
+.flex-color-symbol,
 .route-color-symbol {
   height: 15px;
   width: 15px;
   z-index: 100;
 }
 
+.flex-area-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .active {
-  background-color: black;
+  background-color: #7f807c;
 }
