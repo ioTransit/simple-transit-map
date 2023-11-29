@@ -1,1 +1,0 @@
-﻿fare_id,price,currency_type,payment_method,transfers,agency_id,transfer_duration
