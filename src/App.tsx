@@ -120,11 +120,9 @@ const LayersPanel = ({
   const { current: map } = useMap();
   const clickFlexArea = useCallback(
     (flexAreaName: string | null) => {
+      if (!map) return;
       if (flexArea === flexAreaName) {
         setFlexArea(null);
-        if (!map) {
-          return;
-        }
         map.fitBounds(bounds);
       } else {
         setFlexArea(flexAreaName);
@@ -132,7 +130,6 @@ const LayersPanel = ({
           (feature) => feature.properties.name === flexAreaName,
         );
         if (!area) return;
-        console.log({ area });
         if (area.geometry.type === "Polygon") {
           map?.fitBounds(bbox(turf.polygon(area.geometry.coordinates)), {
             padding: 150,

@@ -20,6 +20,8 @@ const pointStyle = (id: string, color: string, minzoom: number = 12) => {
     type: "circle",
     minzoom,
     paint: {
+      "circle-stroke-color": "#4d473a",
+      "circle-stroke-width": 2,
       "circle-radius": 10,
       "circle-color": color,
     },
@@ -194,7 +196,7 @@ export const Routes = ({ filter }: { filter: string | null }) => {
   );
 };
 export const Stops = () => {
-  const style = pointStyle("stops", "#795548");
+  const style = pointStyle("stops", "#ccb583");
   const { current: map } = useMap();
   const [popupInfo, setPopupInfo] = useState<null | Feature<Point, Stop>>(null);
 
