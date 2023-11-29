@@ -1,5 +1,0 @@
-﻿route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,route_sort_order,continuous_pickup,continuous_drop_off
-green,PHT,Green,,,3,https://www.ridepts.com/green-routes-201-204,009933,FFFFFF,,,
-blue,PHT,Blue,,,3,https://www.ridepts.com/blue-routes-101-108,0066ff,FFFFFF,,,
-orange,PHT,Orange,,,3,https://www.ridepts.com/orange-301-302,ff6600,FFFFFF,,,
-bronze,PHT,Bronze,,,3,https://www.ridepts.com/bronze-404-406-and-501-503,996600,FFFFFF,,,
