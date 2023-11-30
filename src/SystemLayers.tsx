@@ -11,7 +11,7 @@ import {
 import { getJsonFile } from "./lib";
 import { Feature, FeatureCollection, Point } from "geojson";
 import { useMap } from "react-map-gl/dist/esm/components/use-map";
-import { Stop } from "gtfs-types";
+import { Route, Stop } from "gtfs-types";
 
 const pointStyle = (id: string, color: string, minzoom: number = 12) => {
   const style: CircleLayer = {
@@ -189,10 +189,56 @@ export const Routes = ({ filter }: { filter: string | null }) => {
 
   const style = lineStyle("routes", "#795548");
 
+  const { current: map } = useMap();
+  const [popupInfo, setPopupInfo] = useState<null | {
+    feature: Feature<Point, Route>;
+    lngLat: { lng: number; lat: number };
+  }>(null);
+
+  const onClick = useCallback(
+    (
+      e: FeatureCollection<Point, Route> & {
+        lngLat: { lng: number; lat: number };
+      },
+    ) => {
+      if (e.features[0])
+        setPopupInfo({ feature: e.features[0], lngLat: e.lngLat });
+    },
+    [],
+  );
+  useEffect(() => {
+    if (!map) return;
+    else {
+      map.on("load", () => {
+        // @ts-expect-error on click should have 3 arguements
+        map?.on("click", "routes", onClick);
+      });
+    }
+    return () => {
+      // @ts-expect-error on click should have 3 arguements
+      map?.off("click", "routes", onClick);
+    };
+  }, [map, onClick]);
+
   return (
-    <Source id="routes" type="geojson" data="0-routes.json">
-      <Layer {...style} beforeId="road-label-small" filter={_filter}></Layer>
-    </Source>
+    <>
+      {popupInfo && (
+        <Popup
+          anchor="top"
+          longitude={popupInfo.lngLat.lng}
+          latitude={popupInfo.lngLat.lat}
+          onClose={() => setPopupInfo(null)}
+        >
+          <span className="popup-title">
+            <strong>Route Name: </strong>
+            {popupInfo.feature.properties.route_short_name}
+          </span>
+        </Popup>
+      )}
+      <Source id="routes" type="geojson" data="0-routes.json">
+        <Layer {...style} beforeId="road-label-small" filter={_filter}></Layer>
+      </Source>
+    </>
   );
 };
 export const Stops = () => {
@@ -225,10 +271,10 @@ export const Stops = () => {
           latitude={popupInfo.geometry.coordinates[1]}
           onClose={() => setPopupInfo(null)}
         >
-          <h3 className="popup-title">
-            Stop Name: {popupInfo.properties.stop_name}
-          </h3>
-          <p>Routes</p>
+          <span className="popup-title">
+            <strong>Stop Name: </strong>
+            {popupInfo.properties.stop_name}
+          </span>
         </Popup>
       )}
       <Source id="stops" type="geojson" data="0-stops.json">
