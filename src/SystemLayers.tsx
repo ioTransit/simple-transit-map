@@ -231,7 +231,7 @@ export const Routes = ({ filter }: { filter: string | null }) => {
           latitude={popupInfo.lngLat.lat}
           onClose={() => setPopupInfo(null)}
         >
-          <span className="popup-title">
+          <span className="text-black">
             <strong>Route Name: </strong>
             {popupInfo.feature.properties.route_short_name}
           </span>
@@ -273,7 +273,7 @@ export const Stops = () => {
           latitude={popupInfo.geometry.coordinates[1]}
           onClose={() => setPopupInfo(null)}
         >
-          <span className="popup-title">
+          <span className="text-black">
             <strong>Stop Name: </strong>
             {popupInfo.properties.stop_name}
           </span>
