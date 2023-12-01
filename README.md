@@ -6,6 +6,9 @@ That is where Simple Transit Map Steps in. Through preconfigured Github actions 
 
 At this moment Simple Transit Map is to be used for Transit agencies that just want a simple way to show and maintain their routes and is not trying to make it routable. This is a simple visualization of where routes go and the daily footprint of their route alignment. Because of this simplicity it is extremely easy to setup, but in order to extend the work of this repo additional work will need to be done.
 
+![Simple Transit Map](https://github.com/AvidDabbler/simple-transit-map/assets/8471756/0306a1a1-a7c5-4906-a6f9-ac357284679b)
+
+
 ## Development
 To work with simple transit map you need to be able to provide 2 items to the `.env` the Mapbox API key and the GTFS url that you are working with. You can simply copy the `.example.env` and rename it `.env` and add in your values to it. Then to start development you will need to run `npm run dev` and that will start the development server for the application
 
