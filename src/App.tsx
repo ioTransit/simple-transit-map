@@ -266,7 +266,7 @@ const Button = ({
     <button
       onClick={() => onClick(name || null)}
       className={clsx(
-        "bg-gray-100 text-gray-700 w-full flex gap-3",
+        "bg-gray-100 text-gray-700 w-full flex gap-3 truncate",
         isActive && "bg-gray-300",
       )}
     >
