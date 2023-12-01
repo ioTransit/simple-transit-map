@@ -19,10 +19,13 @@ If you want to add flex areas to the map you just have to add a geojson file to 
 Styling:
 In order for you to style your flex areas you are going to need to setup a style in geojson.io and click the `Add Simple Style` button. You can then configure the fill outline color and opacity and those styles will be applied to the map when loaded.
 
+Route Colors
+When it comes to route colors these will need to be setup in the GTFS `routes.txt` file itself under the `route_color` field as a hex color.
+
 ![Add Simple Style](https://github.com/AvidDabbler/simple-transit-map/assets/8471756/daf9f01d-9863-4223-885b-f6860d3473fa)
 
 Required Fields:
-`name`: 
+`name`: The name of the area that you want it assigned in the left panel
 
 [Working with GeoJson.io](https://handsondataviz.org/geojsonio.html)
 
@@ -36,6 +39,12 @@ Required Fields:
 Once you have finished testing and styling your map you are going to need to setup a hosting solution. This code base was designed to be depolyed through Github and using in cooperation with Github actions for easy updates to the schedule information, but this can be hosted on its own server, however, you will need to configure a way to update the schedules on your own using the `npm run gtfs` command on a predetermined schedule using some interface or cron scheduler.
 
 If you end up using Github as a means of deployment and want it to manage the schedule updates for you. You will need to migrate over the `.env` values that you want to use in your Github actions. The instructions for this can be found below. 
+
+On Merge:
+This repo has an action that will update on merge so if anything is changed and then merged into the `main` branch that will trigger and update to the production release. This action can be configured wit hthe `deploy.yml` file in the workflows directory.
+
+On Schedule:
+By default this schedule will be updated on `2am every Monday` and released after procesing. 
 
 ***Mapbox Keys***
 It is recommended that you have seperate keys for both development and production so in cased you have to delete that key you have been using on development you will not lose your production environment.
