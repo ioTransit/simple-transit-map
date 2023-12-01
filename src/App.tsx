@@ -179,9 +179,9 @@ const LayersPanel = ({
   return (
     <div
       id="layer-panel"
-      className="absolute left-6 top-6 bg-white p-6 grid box-shadow max-w-md max-h-[50%] shadow-xl"
+      className="absolute left-6 top-6 bg-white p-6 flex flex-col box-shadow max-w-md max-h-[50%] shadow-xl"
     >
-      <div className="flex gap-1 pl-1 overflow-x-auto border-b-gray-300 border-b">
+      <div className="flex gap-1 pl-1 border-b-gray-300 border-b ">
         <Tab
           title="Routes"
           onClick={tabClick}
@@ -195,56 +195,52 @@ const LayersPanel = ({
           ></Tab>
         )}
       </div>
-      <div className="layer-group">
-        <div className="pt-3 grid gap-3">
-          {routes &&
-            currentTab === "Routes" &&
-            routes.features
-              .sort((a, b) => {
-                if (
-                  !a.properties.route_short_name ||
-                  !a.properties.route_short_name
-                )
-                  return 0;
-                else if (
-                  //@ts-expect-error unreach
-                  a.properties.route_short_name > b.properties.route_short_name
-                )
-                  return 1;
-                else return 0;
-              })
-              .map((route) => {
-                return (
-                  <Button
-                    key={route.id}
-                    name={route.properties.route_short_name || null}
-                    onClick={clickButton}
-                    isActive={filter === route.properties.route_short_name}
-                    fillColor={`#${route.properties.route_color}`}
-                  />
-                );
-              })}
-        </div>
+      <div className="pt-3 grid gap-3 w-full overflow-auto">
+        {routes &&
+          currentTab === "Routes" &&
+          routes.features
+            .sort((a, b) => {
+              if (
+                !a.properties.route_short_name ||
+                !a.properties.route_short_name
+              )
+                return 0;
+              else if (
+                //@ts-expect-error unreach
+                a.properties.route_short_name > b.properties.route_short_name
+              )
+                return 1;
+              else return 0;
+            })
+            .map((route) => {
+              return (
+                <Button
+                  key={route.id}
+                  name={route.properties.route_short_name || null}
+                  onClick={clickButton}
+                  isActive={filter === route.properties.route_short_name}
+                  fillColor={`#${route.properties.route_color}`}
+                />
+              );
+            })}
       </div>
       {flexAreas && currentTab === "Flex Areas" && (
-        <div id="layer-group">
-          <div className="grid gap-3 overflow-auto">
-            {flexAreas.features
-              .sort((a, b) => {
-                if (!a.properties.name || !a.properties.name) return 0;
-                else if (a.properties.name > b.properties.name) return 1;
-                else return 0;
-              })
-              .map((area) => {
-                return (
-                  <Button
-                    name={area.properties.name}
-                    onClick={clickFlexArea}
-                    isActive={filter === area.properties.name}
-                  />
-                );
-              })}
-          </div>
+        <div className="grid gap-3 overflow-auto">
+          {flexAreas.features
+            .sort((a, b) => {
+              if (!a.properties.name || !a.properties.name) return 0;
+              else if (a.properties.name > b.properties.name) return 1;
+              else return 0;
+            })
+            .map((area) => {
+              return (
+                <Button
+                  name={area.properties.name}
+                  onClick={clickFlexArea}
+                  isActive={filter === area.properties.name}
+                />
+              );
+            })}
         </div>
       )}
     </div>
@@ -266,7 +262,7 @@ const Button = ({
     <button
       onClick={() => onClick(name || null)}
       className={clsx(
-        "bg-gray-100 text-gray-700 w-full flex gap-3 truncate",
+        "bg-gray-100 text-gray-700 w-full flex gap-3 truncate h-10 items-center",
         isActive && "bg-gray-300",
       )}
     >
@@ -301,7 +297,7 @@ const Tab = ({
     <button
       onClick={() => onClick(title)}
       className={clsx(
-        "text-base p-2 rounded-b-none text-gray-500 overflow-auto",
+        "text-base py-2 h-10 rounded-b-none text-gray-500 overflow-auto",
         isActive ? "bg-gray-500 text-white" : "bg-gray-200",
       )}
     >
