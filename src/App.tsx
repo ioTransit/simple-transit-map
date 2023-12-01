@@ -118,6 +118,7 @@ const LayersPanel = ({
   bounds: LngLatBoundsLike;
 }) => {
   const { current: map } = useMap();
+  const [currentTab, setCurrentTab] = useState<string>("Routes");
   const clickFlexArea = useCallback(
     (flexAreaName: string | null) => {
       if (!map) return;
@@ -171,12 +172,33 @@ const LayersPanel = ({
     [routes, map, filter, bounds, setFilter],
   );
 
+  const tabClick = (id: string) => {
+    setCurrentTab(id);
+  };
+
   return (
-    <div id="layer-panel">
+    <div
+      id="layer-panel"
+      className="absolute left-6 top-6 bg-white p-6 grid box-shadow max-w-md max-h-[50%] shadow-xl"
+    >
+      <div className="flex gap-1 pl-1 overflow-x-auto border-b-gray-300 border-b">
+        <Tab
+          title="Routes"
+          onClick={tabClick}
+          isActive={currentTab === "Routes"}
+        ></Tab>
+        {flexAreas && (
+          <Tab
+            onClick={tabClick}
+            title="Flex Areas"
+            isActive={currentTab === "Flex Areas"}
+          ></Tab>
+        )}
+      </div>
       <div className="layer-group">
-        <h2 className="layer-group-title">Routes</h2>
-        <div className="layer-list">
+        <div className="pt-3 grid gap-3">
           {routes &&
+            currentTab === "Routes" &&
             routes.features
               .sort((a, b) => {
                 if (
@@ -193,33 +215,20 @@ const LayersPanel = ({
               })
               .map((route) => {
                 return (
-                  <button
+                  <Button
                     key={route.id}
-                    onClick={() =>
-                      clickButton(route.properties.route_short_name || null)
-                    }
-                    className={clsx(
-                      "layer-button",
-                      filter === route.properties.route_short_name && "active",
-                    )}
-                  >
-                    <div
-                      className="route-color-symbol"
-                      style={{
-                        backgroundColor: `#${route.properties.route_color}`,
-                      }}
-                    ></div>
-
-                    <span>{route.properties.route_short_name}</span>
-                  </button>
+                    name={route.properties.route_short_name || null}
+                    onClick={clickButton}
+                    isActive={filter === route.properties.route_short_name}
+                    fillColor={`#${route.properties.route_color}`}
+                  />
                 );
               })}
         </div>
       </div>
-      {flexAreas && (
-        <div className="layer-group">
-          <h2 className="layer-group-title">Flex Areas</h2>
-          <div className="layer-list">
+      {flexAreas && currentTab === "Flex Areas" && (
+        <div id="layer-group">
+          <div className="grid gap-3 overflow-auto">
             {flexAreas.features
               .sort((a, b) => {
                 if (!a.properties.name || !a.properties.name) return 0;
@@ -228,29 +237,13 @@ const LayersPanel = ({
               })
               .map((area) => {
                 return (
-                  <button
-                    key={area.properties.name}
-                    onClick={() => clickFlexArea(area.properties.name || null)}
-                    className={clsx(
-                      "layer-button",
-                      filter === area.properties.name && "active",
-                    )}
-                  >
-                    {/* { */}
-                    {/*   <div */}
-                    {/*     className="flex-color-symbol" */}
-                    {/*     style={{ */}
-                    {/*       backgroundColor: `${area.properties["fill"]}`, */}
-                    {/*     }} */}
-                    {/*   ></div> */}
-                    {/* } */}
-                    <span className="flex-area-name">
-                      {area.properties.name}
-                    </span>
-                  </button>
+                  <Button
+                    name={area.properties.name}
+                    onClick={clickFlexArea}
+                    isActive={filter === area.properties.name}
+                  />
                 );
               })}
-            )
           </div>
         </div>
       )}
@@ -258,9 +251,63 @@ const LayersPanel = ({
   );
 };
 
+const Button = ({
+  name,
+  onClick,
+  fillColor,
+  isActive,
+}: {
+  name: string | null;
+  fillColor?: string;
+  isActive: boolean;
+  onClick: (name: string | null) => void;
+}) => {
+  return (
+    <button
+      onClick={() => onClick(name || null)}
+      className={clsx(
+        "bg-gray-100 text-gray-700 w-full flex gap-3",
+        isActive && "bg-gray-300",
+      )}
+    >
+      {fillColor && (
+        <div
+          className="w-6 h-6"
+          style={{
+            backgroundColor: fillColor,
+          }}
+        ></div>
+      )}
+      <span>{name}</span>
+    </button>
+  );
+};
+
 const Tools = () => {
   useControl(() => new mapboxgl.NavigationControl());
   return null;
+};
+
+const Tab = ({
+  title,
+  onClick,
+  isActive,
+}: {
+  onClick: (id: string) => void;
+  title: string;
+  isActive: boolean;
+}) => {
+  return (
+    <button
+      onClick={() => onClick(title)}
+      className={clsx(
+        "text-base p-2 rounded-b-none text-gray-500 overflow-auto",
+        isActive ? "bg-gray-500 text-white" : "bg-gray-200",
+      )}
+    >
+      {title}
+    </button>
+  );
 };
 
 export default App;

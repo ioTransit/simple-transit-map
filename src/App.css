@@ -1,76 +1,80 @@
-#root {
-  color: black;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.marker {
-  height: 30px;
-  width: 30px;
-}
-
-#layer-panel {
-  position: fixed;
-  width: 180px;
-  gap: 10px;
-  display: grid;
-  top: 20px;
-  background-color: white;
-  padding: 20px;
-  border-radius: 20px;
-  left: 20px;
-}
-
-.layer-group-title {
-  color: black;
-  font-weight: 900;
-  font-size: 16px;
-  padding: 0 0 10px;
-  margin: 0;
-}
-.layer-group {
-  width: 100%;
-  max-height: 300px;
-  margin: 0;
-}
-.layer-list {
-  width: 100%;
-  max-height: 280px;
-  overflow: hidden auto;
-  display: grid;
-  gap: 8px;
-  margin: 0;
-}
-.layer-button {
-  background-color: gray;
-  gap: 10px;
-  display: flex;
-  height: 40px;
-  align-items: center;
-  font-weight: 700;
-  font-size: 14px;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.layer-button:hover {
-  font-style: italic;
-  background-color: lightgray;
-}
-
-.flex-color-symbol,
-.route-color-symbol {
-  height: 15px;
-  width: 15px;
-  z-index: 100;
-}
-
-.flex-area-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.active {
-  background-color: #545352;
-}
+/* #root { */
+/*   color: black; */
+/* } */
+/**/
+/* .marker { */
+/*   height: 30px; */
+/*   width: 30px; */
+/* } */
+/**/
+/* #layer-panel { */
+/*   position: fixed; */
+/*   width: 180px; */
+/*   gap: 10px; */
+/*   display: grid; */
+/*   top: 20px; */
+/*   background-color: white; */
+/*   padding: 20px; */
+/*   border-radius: 20px; */
+/*   left: 20px; */
+/* } */
+/**/
+/* .layer-group-title { */
+/*   color: black; */
+/*   font-weight: 900; */
+/*   font-size: 16px; */
+/*   padding: 0 0 10px; */
+/*   margin: 0; */
+/* } */
+/* .layer-group { */
+/*   width: 100%; */
+/*   max-height: 300px; */
+/*   margin: 0; */
+/* } */
+/* .layer-list { */
+/*   width: 100%; */
+/*   max-height: 280px; */
+/*   overflow: hidden auto; */
+/*   display: grid; */
+/*   gap: 8px; */
+/*   margin: 0; */
+/* } */
+/* .layer-button { */
+/*   background-color: gray; */
+/*   gap: 10px; */
+/*   display: flex; */
+/*   height: 40px; */
+/*   align-items: center; */
+/*   font-weight: 700; */
+/*   font-size: 14px; */
+/*   width: 100%; */
+/*   overflow: hidden; */
+/*   text-overflow: ellipsis; */
+/*   white-space: nowrap; */
+/* } */
+/**/
+/* .layer-button:hover { */
+/*   font-style: italic; */
+/*   background-color: lightgray; */
+/* } */
+/**/
+/* .flex-color-symbol, */
+/* .route-color-symbol { */
+/*   height: 15px; */
+/*   width: 15px; */
+/*   z-index: 100; */
+/* } */
+/**/
+/* .flex-area-name { */
+/*   overflow: hidden; */
+/*   text-overflow: ellipsis; */
+/*   white-space: nowrap; */
+/* } */
+/**/
+/* .active { */
+/*   background-color: #545352; */
+/* } */
