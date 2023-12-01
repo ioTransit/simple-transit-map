@@ -34,6 +34,7 @@ const flexAreaStyle = (color: string) => {
     id: "flex-area",
     source: "flex-area",
     type: "fill",
+    minzoom: 8,
     paint: {
       "fill-color": ["case", ["has", "fill"], ["get", "fill"], color],
       "fill-opacity": [
@@ -48,6 +49,7 @@ const flexAreaStyle = (color: string) => {
     id: "flex-area-outline",
     source: "flex-area",
     type: "line",
+    minzoom: 8,
     paint: {
       "line-color": ["case", ["has", "stroke"], ["get", "stroke"], "black"],
       "line-opacity": [

@@ -1,0 +1,29 @@
+name: Run TypeScript with TSX on Main Branch
+
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: "0 2 * * 1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20 # You can change this to your preferred Node.js version.
+
+      - name: Install Dependencies
+        run: npm install # You should have a package.json with your dependencies.
+
+      - name: Generate JSON Files
+        env:
+          VITE_APP_MAPBOX_KEY: ${{ secrets.VITE_APP_MAPBOX_KEY }}
+          GTFS_URLS: ${{ secrets.GTFS_URLS }}
+
+        run: npm run gtfs
