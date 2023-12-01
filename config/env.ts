@@ -7,12 +7,6 @@ const envSchema = z.object({
   VITE_APP_MAPBOX_KEY: z
     .string()
     .min(1, { message: "MAPBOX_API_KEY required" }),
-  GTFS_URLS: z
-    .string()
-    .min(1, { message: "MAPBOX_API_KEY required" })
-    .transform((d) => {
-      const json = z.array(z.string()).min(1).parse(JSON.parse(d));
-      return json;
-    }),
+  GTFS_URL: z.string().min(1, { message: "MAPBOX_API_KEY required" }),
 });
-export const { GTFS_URLS, VITE_APP_MAPBOX_KEY } = envSchema.parse(process.env);
+export const { GTFS_URL, VITE_APP_MAPBOX_KEY } = envSchema.parse(process.env);

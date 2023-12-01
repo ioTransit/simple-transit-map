@@ -1,6 +1,6 @@
 import * as glob from "glob";
 import fs from "fs";
-import { GTFS_URLS } from "../../config/env";
+import { GTFS_URL } from "../../config/env";
 import path from "path";
 import { Gtfs } from "gtfs-parser";
 import { FeatureCollection, MultiLineString, Position } from "geojson";
@@ -28,26 +28,21 @@ const createEmptyFile = async (filePath: string) => {
 };
 
 const loopThroughAgencies = async () => {
-  for (let i = 0; i < GTFS_URLS.length; i++) {
-    const agencyUrl = GTFS_URLS[i];
-    const gtfs = new Gtfs(agencyUrl);
-    await gtfs.init();
+  const agencyUrl = GTFS_URL;
+  const gtfs = new Gtfs(agencyUrl);
+  await gtfs.init();
 
-    const tripsGeojson = await gtfs.tripsToGeojson();
-    const routesGeojson = await gtfs.routesToGeojson();
-    const stopsGeojson = await gtfs.stopsToGeojson();
+  const tripsGeojson = await gtfs.tripsToGeojson();
+  const routesGeojson = await gtfs.routesToGeojson();
+  const stopsGeojson = await gtfs.stopsToGeojson();
 
-    await createEmptyFile(`./public/${i}-trips.json`);
-    await createEmptyFile(`./public/${i}-routes.json`);
-    await createEmptyFile(`./public/${i}-stops.json`);
+  await createEmptyFile(`./public/0-trips.json`);
+  await createEmptyFile(`./public/0-routes.json`);
+  await createEmptyFile(`./public/0-stops.json`);
 
-    fs.writeFileSync(`./public/${i}-trips.json`, JSON.stringify(tripsGeojson));
-    fs.writeFileSync(`./public/${i}-stops.json`, JSON.stringify(stopsGeojson));
-    fs.writeFileSync(
-      `./public/${i}-routes.json`,
-      JSON.stringify(routesGeojson),
-    );
-  }
+  fs.writeFileSync(`./public/0-trips.json`, JSON.stringify(tripsGeojson));
+  fs.writeFileSync(`./public/0-stops.json`, JSON.stringify(stopsGeojson));
+  fs.writeFileSync(`./public/0-routes.json`, JSON.stringify(routesGeojson));
   generateCatalogue();
   genterateBounds();
 };
