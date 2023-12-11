@@ -24,6 +24,6 @@ jobs:
       - name: Generate JSON Files
         env:
           VITE_APP_MAPBOX_KEY: ${{ secrets.VITE_APP_MAPBOX_KEY }}
-          GTFS_URLS: ${{ secrets.GTFS_URLS }}
+          GTFS_URLS: ${{ secrets.GTFS_URL }}
 
         run: npm run gtfs
