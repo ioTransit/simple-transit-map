@@ -1,4 +1,4 @@
-name: Run TypeScript with TSX on Main Branch
+name: Weekly GTFS Update
 
 on:
   schedule:
